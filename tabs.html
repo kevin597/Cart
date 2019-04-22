@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        ul,
+        li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .tab_li li {
+            padding: 10px 20px;
+            text-align: center;
+            list-style: none;
+            cursor: pointer;
+            display: inline-block;
+            background-color: #f6f6f6;
+            font-size: 14px;
+        }
+
+        .tab_li li.active {
+            background-color: #f90;
+            color: #fff;
+        }
+
+        .tab_con div {
+            margin: 10px 0;
+            border: 1px solid #f6f6f6;
+            padding: 10px;
+            font-size: 14px;
+            min-height: 100px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            new Vue({
+                el: '.container',
+                data: {
+                    cur: 0,//第一个选项卡
+                    cursor: 0,//第二个选项卡
+                    tabTitle: ['标题一', '标题二', '标题三', '标题四'],
+                    tabContent: ['内容一', '内容二', '内容三', '内容四'],
+                    curTime: '1555834342223',
+                    curDateTime:Date.now()
+                },
+                filters: {
+                    dateFormat(date) {
+                        let d = new Date(date.substring(0, 10) * 1000);
+                        let y = d.getFullYear();
+                        let m = d.getMonth() + 1;
+                        let day = d.getDate();
+                        return y + '-' + m + '-' + day;
+                    },
+                    date:(date)=>{
+                        //console.log(date);
+                        let d=new Date(date);
+                        return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <ul class="tab_li">
+            <li v-on:click="cur=0" v-bind:class="{active:cur==0}">标题一</li>
+            <li @click="cur=1" :class="{active:cur==1}">标题二</li>
+            <li @click="cur=2" :class="{active:cur==2}">标题三</li>
+        </ul>
+        <div class="tab_con">
+            <div v-show="cur==0">内容一</div>
+            <div v-show="cur==1">内容二</div>
+            <div v-show="cur==2">内容三</div>
+        </div>
+
+        <ul class="tab_li">
+            <li v-for="(t,i) in tabTitle" @click="cursor=i" :class="{active:cursor==i}">{{t}}</li>
+        </ul>
+        <div class="tab_con">
+            <div v-for="(c,i) in tabContent" v-show="cursor==i">{{c}}</div>
+        </div>
+
+        <h3>过滤器：<small>格式化时间戳</small></h3>
+        <div>{{curTime | dateFormat}}</div>
+        <div>{{curDateTime | date}}</div>
+    </div>
+</body>
+
+</html>
